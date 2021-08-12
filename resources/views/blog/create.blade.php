@@ -9,6 +9,14 @@
         </div>
     </div>
 
+    @if($errors->any())
+        <ul>
+            @foreach($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    @endif
+
     <div class="w-4/5 m-auto pt-20">
         <form 
             action="/blog"
@@ -24,8 +32,7 @@
         
         <textarea name="description"
                   placeholder="Description..."  
-                  class="py-20 bg-transparent block border-b-2 w-full h-60 text-xl outline-none">
-        </textarea>
+                  class="py-20 bg-transparent block border-b-2 w-full h-60 text-xl outline-none"></textarea>
 
         <div class="bg-gray-lighter pt-15">
             <label class="w-44 flex flex-col items-center px-2 py-3 bg-white-rounded-lg shadow-lg tracking-wide uppercase border border-blue cursor-pointer">
