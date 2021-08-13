@@ -13,6 +13,12 @@ class PostController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    public function __construct(){
+
+        $this->middleware('auth', ['except' => ['index', 'show']]);
+    }
+
     public function index()
     {
         return view('blog.index', [
@@ -66,9 +72,9 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Post $blog)
     {
-        //
+        return view('blog.show', ['blog' => $blog]);
     }
 
     /**
@@ -77,9 +83,9 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Post $blog)
     {
-        //
+        return view('blog.edit', ['blog' => $blog]);
     }
 
     /**
@@ -89,9 +95,19 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Post $blog)
     {
-        //
+
+        $blog->update([
+
+            'title' => request()->title,
+            'slug' => Str::slug(request()->title),
+            'description' => request()->description,
+            'user_id' => auth()->user()->id
+
+        ]);
+
+        return redirect('/blog')->with(['message' => 'Post succesfully updated']);
     }
 
     /**
@@ -100,8 +116,10 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Post $blog)
     {
-        //
+        $blog->delete();
+
+        return redirect('/blog')->with('message', 'Post has been deleted');
     }
 }
